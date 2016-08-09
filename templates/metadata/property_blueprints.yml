@@ -1,2 +1,6 @@
 ---
-property_blueprints: []
+property_blueprints:
+- name: broker_username
+  type: secret
+- name: broker_password
+  type: secret
