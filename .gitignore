@@ -3,3 +3,4 @@ credentials.yml
 *.tgz
 tmp
 .DS_Store
+.envrc
