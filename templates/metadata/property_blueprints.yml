@@ -4,3 +4,8 @@ property_blueprints:
   type: secret
 - name: broker_password
   type: secret
+
+- name: vault_token
+  type: secret
+  configurable: true
+  default: ''
