@@ -21,7 +21,7 @@ releases:
 YAML
 
 # versions available via inputs
-boshreleases=("vault-boshrelease" "broker-registrar")
+boshreleases=("vault" "broker-registrar")
 for boshrelease in "${boshreleases[@]}"
 do
   release_version=$(cat ${boshrelease}/version)

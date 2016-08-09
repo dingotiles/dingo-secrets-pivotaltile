@@ -8,6 +8,7 @@ inputs:
 - name: tile
 - name: tile-version
 - name: vault-boshrelease
+  path: vault
 - name: broker-registrar
 
 outputs:

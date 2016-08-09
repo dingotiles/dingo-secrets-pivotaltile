@@ -1,6 +1,6 @@
 job_types:
-- name: etcd
-  resource_label: ETCD
+- name: vault
+  resource_label: Vault
   templates:
   - {name: vault, release: vault}
   static_ip: 1
