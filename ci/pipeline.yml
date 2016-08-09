@@ -3,10 +3,7 @@ groups:
 - name: pipeline
   jobs:
   - create-product
-#   - bump-patch
-#   - bump-minor
-#   - promote-patch
-#   - promote-minor
+  - shipit
 - name: image
   jobs:
   - build-task-image
@@ -44,33 +41,30 @@ jobs:
       opsmgr_skip_ssl_verification: {{opsmgr16-skip-ssl-verification}}
       opsmgr_username: {{opsmgr16-username}}
       opsmgr_password: {{opsmgr16-password}}
-#
-# - name: bump-patch
-#   serial_groups: [opsmgr]
-#   plan:
-#   - aggregate:
-#     - get: tile
-#     - get: tile-version
-#       passed: [create-product]
-#       params: {bump: patch}
-#     - get: generated-tile
-#       passed: [create-product]
-#   - task: re-version-product
-#     file: tile/ci/tasks/re-version-product.yml
-#     params:
-#       AWS_ACCESS_KEY: {{concourse-aws-access-key}}
-#       AWS_SECRET_KEY: {{concourse-aws-secret-access-key}}
-#   - put: tile-version
-#     params: {file: tile-version/number}
-#   - put: generated-tile
-#     params: {file: reversioned-product/dingo-secrets-*.pivotal}
-#   - task: upload-product
-#     file: tile/ci/tasks/upload-product.yml
-#     params:
-#       opsmgr_url: {{opsmgr16-url}}
-#       opsmgr_skip_ssl_verification: {{opsmgr16-skip-ssl-verification}}
-#       opsmgr_username: {{opsmgr16-username}}
-#       opsmgr_password: {{opsmgr16-password}}
+
+- name: shipit
+  serial_groups: [opsmgr]
+  plan:
+  - aggregate:
+    - { get: tile }
+    - { get: generated-tile, passed: [create-product] }
+    - { get: tile-version,   passed: [create-product], params: {bump: final} }
+  - task: re-version-product
+    file: tile/ci/tasks/re-version-product.yml
+    params:
+      AWS_ACCESS_KEY: {{concourse-aws-access-key}}
+      AWS_SECRET_KEY: {{concourse-aws-secret-access-key}}
+  - put: tile-version
+    params: {file: tile-version/number}
+  - put: generated-tile
+    params: {file: reversioned-product/dingo-secrets-*.pivotal}
+  - task: upload-product
+    file: tile/ci/tasks/upload-product.yml
+    params:
+      opsmgr_url: {{opsmgr16-url}}
+      opsmgr_skip_ssl_verification: {{opsmgr16-skip-ssl-verification}}
+      opsmgr_username: {{opsmgr16-username}}
+      opsmgr_password: {{opsmgr16-password}}
 #
 # - name: bump-minor
 #   serial_groups: [opsmgr]
