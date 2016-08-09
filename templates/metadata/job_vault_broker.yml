@@ -19,6 +19,12 @@ job_types:
       default: 10240
       constraints:
         min: 10240
+    - name: persistent_disk
+      type: integer
+      configurable: false
+      default: 0
+      constraints:
+        min: 0
     - name: cpu
       type: integer
       configurable: true
