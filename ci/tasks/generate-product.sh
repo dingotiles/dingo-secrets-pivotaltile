@@ -47,7 +47,7 @@ spruce merge --prune meta \
   tile/templates/metadata/property_blueprints.yml \
   tile/templates/metadata/job_compilation.yml \
   tile/templates/metadata/job_vault.yml \
-  tile/templates/metadata/job_broker.yml \
+  tile/templates/metadata/job_vault_broker.yml \
   tile/templates/metadata/job_broker_registrar.yml \
     > workspace/metadata/dingo-secrets.yml
 
