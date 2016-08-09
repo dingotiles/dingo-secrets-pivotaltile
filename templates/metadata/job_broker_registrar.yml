@@ -49,7 +49,7 @@ job_types:
       name: vault
       protocol: http
       port: 5000
-      host: (( .router.first_ip ))
+      host: (( .vault_broker.first_ip ))
       username: (( .properties.broker_username.value ))
       password: (( .properties.broker_password.value ))
 

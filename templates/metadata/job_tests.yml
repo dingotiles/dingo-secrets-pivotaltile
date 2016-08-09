@@ -39,17 +39,8 @@ job_types:
       default:
         identity: vcap
     manifest: |
-      servicebroker:
-        machines: (( .router.ips ))
-        port: 8889
+      broker:
+        hostname: (( .vault_broker.first_ip ))
+        port: 5000
         username: (( .properties.broker_username.value ))
         password: (( .properties.broker_password.value ))
-      etcd:
-        machines: (( .etcd.ips ))
-      backups:
-        backend: s3
-        s3:
-          aws_access_key: (( .properties.aws_access_key.value ))
-          aws_secret_key: (( .properties.aws_secret_key.value ))
-          s3_bucket: (( .properties.s3_bucket.value ))
-          s3_endpoint: (( .properties.s3_endpoint.value ))
