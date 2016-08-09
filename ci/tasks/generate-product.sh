@@ -51,7 +51,6 @@ spruce merge --prune meta \
     > workspace/metadata/dingo-secrets.yml
 
 sed -i "s/RELEASE_VERSION_MARKER/${TILE_VERSION}/" workspace/metadata/dingo-secrets.yml
-image_tag=$(cat dingo-secrets/version)
 
 cat workspace/metadata/dingo-secrets.yml
 
