@@ -1,11 +1,11 @@
 ---
 platform: linux
-image: docker:///dingotiles/dingo-postgresql-pivotaltile-pipeline
+image: docker:///dingotiles/dingo-secrets-pivotaltile-pipeline
 
 inputs:
 - name: tile
 - name: tile-version
-- name: dingo-postgresql
+- name: vault-boshrelease
 - name: broker-registrar
 
 outputs:

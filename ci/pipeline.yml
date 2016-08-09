@@ -3,45 +3,45 @@ groups:
 - name: pipeline
   jobs:
   - create-product
-  - bump-patch
-  - bump-minor
-  - promote-patch
-  - promote-minor
+#   - bump-patch
+#   - bump-minor
+#   - promote-patch
+#   - promote-minor
 - name: image
   jobs:
   - build-task-image
 
 jobs:
-# - name: create-product
-#   serial_groups: [opsmgr]
-#   plan:
-#   - aggregate:
-#     - get: tile
-#     - get: product-tile
-#       trigger: true
-#     - get: vault-boshrelease
-#       trigger: true
-#       params: {tarball: true}
-#     - get: broker-registrar
-#       params: {tarball: true}
-#     - get: tile-version
-#       params: {pre: rc}
-#   - task: generate-product
-#     file: tile/ci/tasks/generate-product.yml
-#     params:
-#       AWS_ACCESS_KEY: {{concourse-aws-access-key}}
-#       AWS_SECRET_KEY: {{concourse-aws-secret-access-key}}
-#   - put: generated-tile
-#     params: {file: product/dingo-secrets-*.pivotal}
-#   - put: tile-version
-#     params: {file: tile-version/number}
-#   - task: upload-product
-#     file: tile/ci/tasks/upload-product.yml
-#     params:
-#       opsmgr_url: {{opsmgr16-url}}
-#       opsmgr_skip_ssl_verification: {{opsmgr16-skip-ssl-verification}}
-#       opsmgr_username: {{opsmgr16-username}}
-#       opsmgr_password: {{opsmgr16-password}}
+- name: create-product
+  serial_groups: [opsmgr]
+  plan:
+  - aggregate:
+    - get: tile
+    - get: product-tile
+      trigger: true
+    - get: vault-boshrelease
+      trigger: true
+      params: {tarball: true}
+    - get: broker-registrar
+      params: {tarball: true}
+    - get: tile-version
+      params: {pre: rc}
+  - task: generate-product
+    file: tile/ci/tasks/generate-product.yml
+    params:
+      AWS_ACCESS_KEY: {{concourse-aws-access-key}}
+      AWS_SECRET_KEY: {{concourse-aws-secret-access-key}}
+  - put: generated-tile
+    params: {file: product/dingo-secrets-*.pivotal}
+  - put: tile-version
+    params: {file: tile-version/number}
+  - task: upload-product
+    file: tile/ci/tasks/upload-product.yml
+    params:
+      opsmgr_url: {{opsmgr16-url}}
+      opsmgr_skip_ssl_verification: {{opsmgr16-skip-ssl-verification}}
+      opsmgr_username: {{opsmgr16-username}}
+      opsmgr_password: {{opsmgr16-password}}
 #
 # - name: bump-patch
 #   serial_groups: [opsmgr]
@@ -177,20 +177,11 @@ resources:
     private_key: {{github-key}}
 
 - name: vault-boshrelease
-  type: github-release
-  source:
-    access_token: {{github-release-access-token}}
-    user: dingotiles
-    repository: vault-boshrelease
+  type: bosh-io-release
+  source: {repository: cloudfoundry-community/vault-boshrelease}
 - name: broker-registrar
   type: bosh-io-release
   source: {repository: cloudfoundry-community/broker-registrar-boshrelease}
-- name: etcd
-  type: bosh-io-release
-  source: {repository: cloudfoundry-incubator/etcd-release}
-- name: simple-remote-syslog
-  type: bosh-io-release
-  source: {repository: cloudfoundry-community/simple-remote-syslog-boshrelease}
 
 - name: generated-tile
   type: s3
