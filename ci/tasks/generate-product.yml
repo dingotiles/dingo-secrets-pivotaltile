@@ -10,6 +10,7 @@ inputs:
 - name: vault-boshrelease
   path: vault
 - name: broker-registrar
+- name: pivnet-stemcells
 
 outputs:
 - name: product
