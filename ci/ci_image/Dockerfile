@@ -23,3 +23,14 @@ RUN chmod 755 /usr/bin/spruce
 
 ADD https://cli.run.pivotal.io/stable?release=linux64-binary&version=6.21.0 /tmp/cf.tgz
 RUN tar xzf /tmp/cf.tgz -C /usr/bin && rm /tmp/cf.tgz
+
+# Set environment variables.
+ENV GOROOT /goroot
+ENV GOPATH /gopath
+ENV PATH $GOROOT/bin:$GOPATH/bin:$PATH
+
+# Install Go & yaml2json
+RUN \
+  mkdir -p /goroot && \
+  curl https://storage.googleapis.com/golang/go1.6.2.linux-amd64.tar.gz | tar xvzf - -C /goroot --strip-components=1 && \
+  go get github.com/bronze1man/yaml2json
