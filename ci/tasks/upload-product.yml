@@ -1,0 +1,10 @@
+---
+platform: linux
+image: docker:///dingotiles/dingo-postgresql-pivotaltile-pipeline
+
+inputs:
+- name: tile
+- name: generated-tile
+
+run:
+  path: tile/ci/tasks/upload-product.sh

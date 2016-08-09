@@ -1,0 +1,15 @@
+---
+platform: linux
+image: docker:///dingotiles/dingo-postgresql-pivotaltile-pipeline
+
+inputs:
+- name: tile
+- name: tile-version
+- name: dingo-postgresql
+- name: broker-registrar
+
+outputs:
+- name: product
+
+run:
+  path: tile/ci/tasks/generate-product.sh
