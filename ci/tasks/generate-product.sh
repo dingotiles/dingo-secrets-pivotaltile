@@ -56,6 +56,8 @@ sed -i "s/RELEASE_VERSION_MARKER/${TILE_VERSION}/" workspace/metadata/dingo-secr
 
 cat workspace/metadata/dingo-secrets.yml
 
+gem install mime-types
+
 echo Looking up all previous versions to generate content_migrations/dingo-secrets.yml
 ./tile/ci/tasks/generate_content_migration.rb ${TILE_VERSION} workspace/content_migrations/dingo-secrets.yml
 
