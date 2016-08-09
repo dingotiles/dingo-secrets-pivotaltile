@@ -5,6 +5,8 @@ RUN apt-get update && \
         libxml2-dev libxslt-dev libcurl4-openssl-dev \
         build-essential zlib1g-dev libssl-dev libreadline6-dev libyaml-dev \
         tree file curl wget bzr jq \
+        python-pip \
+    && pip --no-input install awscli \
     && apt-get clean
 
 # install ruby & required gems/CLIs
