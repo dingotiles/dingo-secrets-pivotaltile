@@ -16,7 +16,7 @@ RUN cd \
       && make \
       && make install \
       && ruby -v \
-      && gem install bundler bosh_cli license_finder --no-rdoc --no-ri
+      && gem install bundler bosh_cli license_finder fog mime_types --no-rdoc --no-ri
 
 ADD https://github.com/geofffranks/spruce/releases/download/v1.6.0/spruce-linux-amd64 /usr/bin/spruce
 RUN chmod 755 /usr/bin/spruce
