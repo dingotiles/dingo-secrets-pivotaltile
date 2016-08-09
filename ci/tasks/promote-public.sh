@@ -3,7 +3,7 @@
 set -e # fail fast
 set -x
 
-TILE_NAME=${TILE_NAME:-dingo-postgresql}
+TILE_NAME=${TILE_NAME:-dingo-secrets}
 TILE_VERSION=$(cat tile-version/number)
 
 filename=${TILE_NAME}-${TILE_VERSION}.pivotal

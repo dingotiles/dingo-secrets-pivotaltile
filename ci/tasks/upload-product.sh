@@ -3,7 +3,7 @@
 set -x # print commands
 set -e # fail fast
 
-tile_path=$(ls generated-tile/dingo-postgresql*.pivotal)
+tile_path=$(ls generated-tile/dingo-secrets*.pivotal)
 ls -al ${tile_path}
 
 if [[ "${opsmgr_url}X" == "X" ]]; then
@@ -22,28 +22,28 @@ curl -sf ${skip_ssl} -u ${opsmgr_username}:${opsmgr_password} \
   "${opsmgr_url}/api/products"; echo
 
 echo Getting $product_version from inside .pivotal zip file
-zip_tile_path=generated-tile/dingo-postgresql.zip
+zip_tile_path=generated-tile/dingo-secrets.zip
 mv ${tile_path} ${zip_tile_path}
-  unzip -u ${zip_tile_path} metadata/dingo-postgresql.yml
-  product_version=$(cat metadata/dingo-postgresql.yml| yaml2json | jq -r .product_version)
+  unzip -u ${zip_tile_path} metadata/dingo-secrets.yml
+  product_version=$(cat metadata/dingo-secrets.yml| yaml2json | jq -r .product_version)
   echo Installing product version $product_version
 mv ${zip_tile_path} ${tile_path}
 
 prev_version=$(curl -f ${skip_ssl} -u ${opsmgr_username}:${opsmgr_password} \
-  "${opsmgr_url}/api/installation_settings" | jq -r ".products[] | select(.identifier == \"dingo-postgresql\") | .product_version")
+  "${opsmgr_url}/api/installation_settings" | jq -r ".products[] | select(.identifier == \"dingo-secrets\") | .product_version")
 
 if [[ "${prev_version}X" == "X" ]]; then
   echo Adding product ${product_version} to the installation
   product_install_uuid=$(curl -f ${skip_ssl} -u ${opsmgr_username}:${opsmgr_password} \
-    "${opsmgr_url}/api/installation_settings" | jq -r ".products[] | select(.identifier == \"dingo-postgresql\") | .guid")
+    "${opsmgr_url}/api/installation_settings" | jq -r ".products[] | select(.identifier == \"dingo-secrets\") | .guid")
   curl -f ${skip_ssl} -u ${opsmgr_username}:${opsmgr_password} \
     ${opsmgr_url}/api/installation_settings/products -X POST \
-      -d "name=dingo-postgresql&product_version=${product_version}"
+      -d "name=dingo-secrets&product_version=${product_version}"
 else
   echo Upgrading product from ${prev_version} to ${product_version}
 
   product_install_uuid=$(curl -f ${skip_ssl} -u ${opsmgr_username}:${opsmgr_password} \
-    "${opsmgr_url}/api/installation_settings" | jq -r ".products[] | select(.identifier == \"dingo-postgresql\") | .guid")
+    "${opsmgr_url}/api/installation_settings" | jq -r ".products[] | select(.identifier == \"dingo-secrets\") | .guid")
   curl -f ${skip_ssl} -u ${opsmgr_username}:${opsmgr_password} \
     ${opsmgr_url}/api/installation_settings/products/${product_install_uuid} -X PUT \
       -d "to_version=${product_version}"

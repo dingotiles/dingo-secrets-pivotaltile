@@ -6,7 +6,7 @@ job_types:
   - name: sanity-test
     resource_label: Internal sanity test of broker
     templates:
-    - {name: sanity-test, release: dingo-postgresql}
+    - {name: sanity-test, release: dingo-secrets}
     errand: true
     resource_definitions:
     - name: ram
