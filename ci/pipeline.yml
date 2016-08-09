@@ -24,6 +24,8 @@ jobs:
       params: {tarball: true}
     - get: broker-registrar
       params: {tarball: true}
+    - get: pivnet-stemcells
+      trigger: true
     - get: tile-version
       params: {pre: rc}
   - task: generate-product
@@ -183,6 +185,12 @@ resources:
   type: bosh-io-release
   source: {repository: cloudfoundry-community/broker-registrar-boshrelease}
 
+- name: pivnet-stemcells
+  type: pivnet
+  source:
+    api_token: {{pivnet-api-token}}
+    product_slug: stemcells
+
 - name: generated-tile
   type: s3
   source:
@@ -191,3 +199,10 @@ resources:
     bucket: dingo-secrets-pivotaltile
     regexp: dingo-secrets-(.*).pivotal
     region_name: ap-southeast-1
+
+resource_types:
+- name: pivnet
+  type: docker-image
+  source:
+    repository: pivotalcf/pivnet-resource
+    tag: latest-final
