@@ -1,6 +1,8 @@
 ---
 platform: linux
-image: docker:///dingotiles/dingo-secrets-pivotaltile-pipeline
+image_resource:
+   type: docker-image
+   source: {repository: dingotiles/dingo-secrets-pivotaltile-pipeline}
 
 inputs:
 - name: tile
