@@ -2,7 +2,7 @@ job_types:
 - name: vault_broker
   resource_label: Vault broker
   templates:
-  - {name: vault_broker, release: vault}
+  - {name: vault-broker, release: vault}
   static_ip: 1
   dynamic_ip: 0
   max_in_flight: 500
