@@ -50,5 +50,5 @@ job_types:
           description: Your Very Own Vault of Secrets
           tags:        [vault, credentials, secure, dingotiles]
         backend:
-          address: (( .vault.first_ip )):8200
+          address: http://(( .vault.first_ip )):8200
           token:   (( .properties.vault_token.value ))
