@@ -8,4 +8,4 @@ property_blueprints:
 - name: vault_token
   type: secret
   configurable: true
-  default: ''
+  optional: true

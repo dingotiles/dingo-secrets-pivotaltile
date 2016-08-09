@@ -1,8 +1,8 @@
 form_types:
 - name: broker
   label: Service Broker
-  description: After initial deployment, provide VAULT_TOKEN
+  description: Configure broker after initial tile deployment
   property_inputs:
     - reference: .properties.vault_token
-      label: Vault token
-      description: Vault token from vault initialization
+      label: Vault token from vault initialization
+      description: Value generated from "vault init"
