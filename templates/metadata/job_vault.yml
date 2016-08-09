@@ -40,19 +40,5 @@ job_types:
       default:
         identity: vcap
   manifest: |
-      vault:
-        broker:
-          guid: 64ef37bb-25c4-49e9-a847-eee27bde10e2
-          username: (( .properties.broker_username ))
-          password: (( .properties.broker_password ))
-          service:
-            name:        vault
-            description: Your Very Own Vault of Secrets
-            tags:
-              - vault
-              - credentials
-              - secure
-              - dingotiles
-          backend:
-            address: (( .vault.first_ip )):8200
-            token:   (( .properties.vault_token.value ))
+    vault:
+      backend: {use_file: true}
