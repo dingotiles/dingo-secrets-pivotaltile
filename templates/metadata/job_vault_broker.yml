@@ -34,6 +34,10 @@ job_types:
       type: integer
       configurable: false
       default: 1
+      # PCF 1.7+
+      # zero_if:
+      #   property_reference: '.properties.vault_token'
+      #   property_values: ['']
   property_blueprints:
     - name: vm_credentials
       type: salted_credentials
