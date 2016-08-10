@@ -6,6 +6,6 @@ property_blueprints:
   type: secret
 
 - name: vault_token
-  type: secret
+  type: string
   configurable: true
   default: 'TODO'
