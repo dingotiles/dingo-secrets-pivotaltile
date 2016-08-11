@@ -26,13 +26,15 @@ uaac token owner get opsman ${opsmgr_username} -s '' -p ${opsmgr_password}
 access_token=$(uaac context admin | grep access_token | awk '{print $2}')
 
 curl ${insecure} -H "Authorization: Bearer ${access_token}" \
-  "${opsmgr_url}/api/v0/products" -X GET
+  "${opsmgr_url}/api/v0/products"; echo
+curl -f ${insecure} -H "Authorization: Bearer ${access_token}" \
+  "${opsmgr_url}/api/v0/staged/products"; echo
 
 curl -f ${insecure} -H "Authorization: Bearer ${access_token}" \
-  "${opsmgr_url}/api/v0/products" -X POST -F "product[file]=@${tile_path}"; echo
+  "${opsmgr_url}/api/v0/available_products" -X POST -F "product[file]=@${tile_path}"; echo
 
 curl -sf ${insecure} -H "Authorization: Bearer ${access_token}" \
-  "${opsmgr_url}/api/v0/products"; echo
+  "${opsmgr_url}/api/v0/products" -X GET; echo
 
 echo Getting $product_version from inside .pivotal zip file
 zip_tile_path=generated-tile/dingo-secrets.zip
@@ -50,7 +52,7 @@ if [[ "${prev_version}X" == "X" ]]; then
   product_install_uuid=$(curl -f ${insecure} -H "Authorization: Bearer ${access_token}" \
     "${opsmgr_url}/api/v0/installation_settings" | jq -r ".products[] | select(.identifier == \"dingo-secrets\") | .guid")
   curl -f ${insecure} -H "Authorization: Bearer ${access_token}" \
-    ${opsmgr_url}/api/v0/installation_settings/products -X POST \
+    ${opsmgr_url}/api/v0/staged/products -X POST \
       -d "name=dingo-secrets&product_version=${product_version}"
 else
   echo Upgrading product from ${prev_version} to ${product_version}
@@ -58,7 +60,7 @@ else
   product_install_uuid=$(curl -f ${insecure} -H "Authorization: Bearer ${access_token}" \
     "${opsmgr_url}/api/v0/installation_settings" | jq -r ".products[] | select(.identifier == \"dingo-secrets\") | .guid")
   curl -f ${insecure} -H "Authorization: Bearer ${access_token}" \
-    ${opsmgr_url}/api/v0/installation_settings/products/${product_install_uuid} -X PUT \
+    ${opsmgr_url}/api/v0/staged/products/${product_install_uuid} -X PUT \
       -d "to_version=${product_version}"
 fi
 echo
@@ -76,14 +78,14 @@ prevlogslength=0
 until [[ "${status}" != "running" ]]; do
   sleep 1
   status_json=$(curl -sf ${insecure} -H "Authorization: Bearer ${access_token}" \
-    "${opsmgr_url}/api/v0/installation/${installation_id}")
+    "${opsmgr_url}/api/v0/installations/${installation_id}")
   status=$(echo $status_json | jq -r .status)
   if [[ "${status}X" == "X" || "${status}" == "failed" ]]; then
     installation_exit=1
   fi
 
   logs=$(curl -sf ${insecure} -H "Authorization: Bearer ${access_token}" \
-    ${opsmgr_url}/api/v0/installation/${installation_id}/logs | jq -r .logs)
+    ${opsmgr_url}/api/v0/installations/${installation_id}/logs | jq -r .logs)
   if [[ "${logs:${prevlogslength}}" != "" ]]; then
     echo "${logs:${prevlogslength}}"
     prevlogslength=${#logs}
