@@ -27,6 +27,10 @@ function curl_auth() {
   curl -f ${insecure} -H "Authorization: Bearer ${access_token}" $@
 }
 
+function curl_auth_quiet() {
+  curl -sf ${insecure} -H "Authorization: Bearer ${access_token}" $@
+}
+
 set +x
 curl_auth "${opsmgr_url}/api/v0/available_products"; echo
 curl_auth "${opsmgr_url}/api/v0/staged/products"; echo
@@ -73,13 +77,13 @@ status=running
 prevlogslength=0
 until [[ "${status}" != "running" ]]; do
   sleep 1
-  status_json=$(curl_auth -s "${opsmgr_url}/api/v0/installations/${installation_id}")
+  status_json=$(curl_auth_quiet "${opsmgr_url}/api/v0/installations/${installation_id}")
   status=$(echo $status_json | jq -r .status)
   if [[ "${status}X" == "X" || "${status}" == "failed" ]]; then
     installation_exit=1
   fi
 
-  logs=$(curl_auth -s ${opsmgr_url}/api/v0/installations/${installation_id}/logs | jq -r .logs)
+  logs=$(curl_auth_quiet ${opsmgr_url}/api/v0/installations/${installation_id}/logs | jq -r .logs)
   if [[ "${logs:${prevlogslength}}" != "" ]]; then
     echo "${logs:${prevlogslength}}"
     prevlogslength=${#logs}
