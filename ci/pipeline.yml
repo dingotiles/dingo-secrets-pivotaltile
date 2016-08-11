@@ -36,13 +36,21 @@ jobs:
     params: {file: product/dingo-secrets-*.pivotal}
   - put: tile-version
     params: {file: tile-version/number}
-  - task: upload-product
-    file: tile/ci/tasks/upload-product.yml
-    params:
-      opsmgr_url: {{opsmgr16-url}}
-      opsmgr_skip_ssl_verification: {{opsmgr16-skip-ssl-verification}}
-      opsmgr_username: {{opsmgr16-username}}
-      opsmgr_password: {{opsmgr16-password}}
+  - aggregate:
+    - task: upload-product-opsmgr16
+      file: tile/ci/tasks/upload-product.yml
+      params:
+        opsmgr_url: {{opsmgr16-url}}
+        opsmgr_skip_ssl_verification: {{opsmgr16-skip-ssl-verification}}
+        opsmgr_username: {{opsmgr16-username}}
+        opsmgr_password: {{opsmgr16-password}}
+    - task: upload-product-opsmgr17
+      file: tile/ci/tasks/upload-product.yml
+      params:
+        opsmgr_url: {{opsmgr17-url}}
+        opsmgr_skip_ssl_verification: {{opsmgr17-skip-ssl-verification}}
+        opsmgr_username: {{opsmgr17-username}}
+        opsmgr_password: {{opsmgr17-password}}
 
 - name: shipit
   serial_groups: [opsmgr]
@@ -60,13 +68,21 @@ jobs:
     params: {file: tile-version/number}
   - put: generated-tile
     params: {file: reversioned-product/dingo-secrets-*.pivotal}
-  - task: upload-product
-    file: tile/ci/tasks/upload-product.yml
-    params:
-      opsmgr_url: {{opsmgr16-url}}
-      opsmgr_skip_ssl_verification: {{opsmgr16-skip-ssl-verification}}
-      opsmgr_username: {{opsmgr16-username}}
-      opsmgr_password: {{opsmgr16-password}}
+  - aggregate:
+    - task: upload-product-opsmgr16
+      file: tile/ci/tasks/upload-product.yml
+      params:
+        opsmgr_url: {{opsmgr16-url}}
+        opsmgr_skip_ssl_verification: {{opsmgr16-skip-ssl-verification}}
+        opsmgr_username: {{opsmgr16-username}}
+        opsmgr_password: {{opsmgr16-password}}
+    - task: upload-product-opsmgr17
+      file: tile/ci/tasks/upload-product.yml
+      params:
+        opsmgr_url: {{opsmgr17-url}}
+        opsmgr_skip_ssl_verification: {{opsmgr17-skip-ssl-verification}}
+        opsmgr_username: {{opsmgr17-username}}
+        opsmgr_password: {{opsmgr17-password}}
 
 - name: patch
   serial_groups: [opsmgr]
