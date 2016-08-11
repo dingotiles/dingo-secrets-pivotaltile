@@ -25,16 +25,15 @@ uaac token owner get opsman ${opsmgr_username} -s '' -p ${opsmgr_password}
 
 access_token=$(uaac context admin | grep access_token | awk '{print $2}')
 
-curl ${insecure} -H "Authorization: Bearer ${access_token}" \
-  "${opsmgr_url}/api/v0/products"; echo
 curl -f ${insecure} -H "Authorization: Bearer ${access_token}" \
-  "${opsmgr_url}/api/v0/staged/products"; echo
+  "${opsmgr_url}/api/v0/available_products"
+curl -f ${insecure} -H "Authorization: Bearer ${access_token}" \
+  "${opsmgr_url}/api/v0/staged/products"
+curl ${insecure} -H "Authorization: Bearer ${access_token}" \
+  "${opsmgr_url}/api/v0/deployed/products"
 
 curl -f ${insecure} -H "Authorization: Bearer ${access_token}" \
   "${opsmgr_url}/api/v0/available_products" -X POST -F "product[file]=@${tile_path}"; echo
-
-curl -sf ${insecure} -H "Authorization: Bearer ${access_token}" \
-  "${opsmgr_url}/api/v0/products" -X GET; echo
 
 echo Getting $product_version from inside .pivotal zip file
 zip_tile_path=generated-tile/dingo-secrets.zip
