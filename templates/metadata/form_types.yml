@@ -1,4 +1,39 @@
 form_types:
+- name: backend
+  label: Vault backend
+  description: Choose Vault backend for simplicty vs high-availability
+  markdown: |
+    ## Choosing a Vault backend
+
+    Hashicorp Vault supports various backends for storage of user data.
+
+    Choose based on simplicity (local filesystem) or high-availability (Amazon S3).
+  property_inputs:
+    - reference: .properties.backend_selector
+      label: Backend choices
+      selector_property_inputs:
+        - reference: .properties.backend_selector.file_option
+          label: Local filesystem
+          property_inputs: []
+        - reference: .properties.backend_selector.s3_option
+          label: Amazon S3
+          property_inputs:
+            - reference: .properties.backend_selector.s3_option.aws_access_key
+              label: AWS Access Key
+              description: AWS Access Key used to create/manage files in bucket
+            - reference: .properties.backend_selector.s3_option.aws_secret_key
+              label: AWS Secret Key
+              description: AWS Secret Key used to create/manage files in bucket
+            - reference: .properties.backend_selector.s3_option.bucket
+              label: S3 Bucket
+              description: Amazon S3 bucket for Vault file
+            - reference: .properties.backend_selector.s3_option.region
+              label: AWS Region
+              description: AWS Region for S3 bucket
+            - reference: .properties.backend_selector.s3_option.session_token
+              label: Session token
+              description: Session token
+
 - name: post-initialize
   label: After Vault Initialization
   description: Provide vault token after first tile deployment

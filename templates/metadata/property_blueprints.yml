@@ -9,3 +9,46 @@ property_blueprints:
   type: string
   configurable: true
   default: 'TODO'
+
+- name: backend_selector
+  type: selector
+  configurable: true
+  default: "Local filesystem"
+  option_templates:
+    - name: file_option
+      select_value: "Local filesystem"
+      named_manifests:
+        - name: vault_backend_snippet
+          manifest: |
+            use_file: true
+      property_blueprints: []
+    - name: s3_option
+      select_value: "Amazon S3"
+      named_manifests:
+        - name: vault_backend_snippet
+          manifest: |
+            use_s3: true
+            s3:
+              access_key: (( .properties.backend_selector.s3_option.aws_access_key.value ))
+              secret_key: (( .properties.backend_selector.s3_option.aws_secret_key.value ))
+              bucket: (( .properties.backend_selector.s3_option.bucket.value ))
+              region: (( .properties.backend_selector.s3_option.region.value ))
+              session_token: (( .properties.backend_selector.s3_option.session_token.value ))
+      property_blueprints:
+        - name: aws_access_key
+          type: string
+          configurable: true
+        - name: aws_secret_key
+          type: string
+          configurable: true
+        - name: bucket
+          type: string
+          configurable: true
+        - name: region
+          type: string
+          configurable: true
+          default: us-east-1
+        - name: session_token
+          type: string
+          configurable: true
+          optional: true

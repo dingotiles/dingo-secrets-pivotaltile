@@ -45,4 +45,4 @@ job_types:
         identity: vcap
   manifest: |
     vault:
-      backend: {use_file: true}
+      backend: (( .properties.backend_selector.selected_option.parsed_manifest(vault_backend_snippet) ))
