@@ -50,7 +50,7 @@ job_types:
         username: (( .properties.broker_username.value ))
         password: (( .properties.broker_password.value ))
         service:
-          name:        vault
+          name:        dingo-secrets
           description: Your Very Own Vault of Secrets
           tags:        [vault, credentials, secure, dingotiles]
         backend:
