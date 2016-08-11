@@ -6,5 +6,12 @@ inputs:
 - name: tile
 - name: generated-tile
 
+params:
+  opsmgr_url:
+  opsmgr_skip_ssl_verification:
+  opsmgr_username:
+  opsmgr_password:
+  opsmgr_version:
+
 run:
   path: tile/ci/tasks/upload-product.sh
