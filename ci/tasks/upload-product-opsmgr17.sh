@@ -31,7 +31,7 @@ function info() {
 
 function curl_auth() {
   info curl $@
-  curl -sf ${insecure} -H "Authorization: Bearer ${access_token}" $@
+  curl -f ${insecure} -H "Authorization: Bearer ${access_token}" $@
 }
 
 set +x
@@ -51,16 +51,17 @@ mv ${tile_path} ${zip_tile_path}
   echo Installing product version $product_version
 mv ${zip_tile_path} ${tile_path}
 
-prev_version=$(curl_auth "${opsmgr_url}/api/v0/deployed/products" | jq -r ".[] | select(.type == \"dingo-secrets\")")
+prev_version=$(curl_auth -s "${opsmgr_url}/api/v0/deployed/products" | jq -r ".[] | select(.type == \"dingo-secrets\")")
 
 if [[ "${prev_version}X" == "X" ]]; then
   echo Adding product ${product_version} to the installation
-  curl_auth "${opsmgr_url}/api/v0/staged/products" -X POST \
+  curl -f ${insecure} -H "Authorization: Bearer ${access_token}" \
+    "${opsmgr_url}/api/v0/staged/products" -X POST \
       -d "name=dingo-secrets&product_version=${product_version}"
 else
   echo Upgrading product to ${product_version}
 
-  product_install_uuid=$(curl_auth "${opsmgr_url}/api/v0/staged/products" | jq -r ".[] | select(.type == \"dingo-secrets\") | .guid")
+  product_install_uuid=$(curl_auth -s "${opsmgr_url}/api/v0/staged/products" | jq -r ".[] | select(.type == \"dingo-secrets\") | .guid")
   curl_auth "${opsmgr_url}/api/v0/staged/products/${product_install_uuid}" -X PUT \
       -d "to_version=${product_version}"
 fi
@@ -69,7 +70,7 @@ echo
 echo "\nInstalling product\n"
 
 echo "Running installation process"
-response=$(curl -sf ${insecure} -H "Authorization: Bearer ${access_token}" \
+response=$(curl -f ${insecure} -H "Authorization: Bearer ${access_token}" \
   "${opsmgr_url}/api/v0/installations?ignore_warnings=1" -d '' -X POST)
 installation_id=$(echo $response | jq -r .install.id)
 
@@ -78,13 +79,13 @@ status=running
 prevlogslength=0
 until [[ "${status}" != "running" ]]; do
   sleep 1
-  status_json=$(curl_auth "${opsmgr_url}/api/v0/installations/${installation_id}")
+  status_json=$(curl_auth -s "${opsmgr_url}/api/v0/installations/${installation_id}")
   status=$(echo $status_json | jq -r .status)
   if [[ "${status}X" == "X" || "${status}" == "failed" ]]; then
     installation_exit=1
   fi
 
-  logs=$(curl_auth ${opsmgr_url}/api/v0/installations/${installation_id}/logs | jq -r .logs)
+  logs=$(curl_auth -s ${opsmgr_url}/api/v0/installations/${installation_id}/logs | jq -r .logs)
   if [[ "${logs:${prevlogslength}}" != "" ]]; then
     echo "${logs:${prevlogslength}}"
     prevlogslength=${#logs}
