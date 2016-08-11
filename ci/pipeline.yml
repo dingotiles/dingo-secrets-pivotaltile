@@ -64,14 +64,14 @@ jobs:
   - put: tile-version
     params: {file: tile-version/number}
   - aggregate:
-    # - task: upload-product-opsmgr16
-    #   file: tile/ci/tasks/upload-product.yml
-    #   params:
-    #     opsmgr_url: {{opsmgr16-url}}
-    #     opsmgr_skip_ssl_verification: {{opsmgr16-skip-ssl-verification}}
-    #     opsmgr_username: {{opsmgr16-username}}
-    #     opsmgr_password: {{opsmgr16-password}}
-    #     opsmgr_version: 1.6
+    - task: upload-product-opsmgr16
+      file: tile/ci/tasks/upload-product.yml
+      params:
+        opsmgr_url: {{opsmgr16-url}}
+        opsmgr_skip_ssl_verification: {{opsmgr16-skip-ssl-verification}}
+        opsmgr_username: {{opsmgr16-username}}
+        opsmgr_password: {{opsmgr16-password}}
+        opsmgr_version: 1.6
     - task: upload-product-opsmgr17
       file: tile/ci/tasks/upload-product.yml
       params:
