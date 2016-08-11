@@ -7,7 +7,7 @@ mkdir -p tile/tmp/metadata
 mkdir -p workspace/metadata
 mkdir -p workspace/releases
 mkdir -p workspace/content_migrations # opsmgr v1.6
-mkdir -p workspace/migrations         # opsmgr v1.7
+cp -r tile/migrations workspace/ # opsmgr v1.7
 
 TILE_VERSION=$(cat tile-version/number)
 
