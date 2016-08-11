@@ -10,9 +10,8 @@ mkdir -p workspace/content_migrations
 
 TILE_VERSION=$(cat tile-version/number)
 
-ls pivnet-stemcells/*
-cat pivnet-stemcells/metadata.json
-STEMCELL_VERSION=$(cat pivnet-stemcells/metadata.json | jq -r ".Release.Version")
+cat pivnet-stemcell/metadata.json
+STEMCELL_VERSION=$(cat pivnet-stemcell/metadata.json | jq -r ".Release.Version")
 
 cat >tile/tmp/metadata/version.yml <<EOF
 ---
