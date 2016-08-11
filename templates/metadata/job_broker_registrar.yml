@@ -95,7 +95,7 @@ job_types:
       admin_password: (( ..cf.uaa.admin_credentials.password ))
       skip_ssl_validation: (( ..cf.ha_proxy.skip_cert_verify.value ))
     broker:
-      name: vault
+      name: dingo-secrets
       protocol: http
       port: 5000
       host: (( .vault_broker.first_ip ))
