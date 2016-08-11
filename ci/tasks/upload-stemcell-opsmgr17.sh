@@ -10,8 +10,6 @@ if [[ "${opsmgr_skip_ssl_verification}X" != "X" ]]; then
   skip_ssl="--skip-ssl-validation"
 fi
 
-gem install cf-uaac
-
 uaac target ${opsmgr_url}/uaa ${skip_ssl}
 uaac token owner get opsman ${opsmgr_username} -s '' -p ${opsmgr_password}
 
