@@ -6,11 +6,6 @@ set -e # fail fast
 tile_path=$(ls generated-tile/dingo-secrets*.pivotal)
 ls -al ${tile_path}
 
-if [[ "${opsmgr_url}X" == "X" ]]; then
-  echo "upload-product.sh requires \$opsmgr_url, \$opsmgr_username, \$opsmgr_password"
-  exit
-fi
-
 insecure=
 skip_ssl=
 if [[ "${opsmgr_skip_ssl_verification}X" != "X" ]]; then
