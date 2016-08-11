@@ -59,12 +59,13 @@ else
       -d "to_version=${product_version}"
 fi
 echo
+product_install_uuid=$(curl_auth -s "${opsmgr_url}/api/v0/staged/products" | jq -r ".[] | select(.type == \"dingo-secrets\") | .guid")
 
-echo "\nInstalling product\n"
+echo "Installing product (guid ${product_install_uuid})"
 
 echo "Running installation process"
 response=$(curl -f ${insecure} -H "Authorization: Bearer ${access_token}" \
-  "${opsmgr_url}/api/v0/installations?ignore_warnings=1" -d '' -X POST)
+  "${opsmgr_url}/api/v0/installations" -d "ignore_warnings=1&enabled_errands[${product_install_uuid}][broker-registrar][]=a" -X POST)
 installation_id=$(echo $response | jq -r .install.id)
 
 set +x # silence print commands
