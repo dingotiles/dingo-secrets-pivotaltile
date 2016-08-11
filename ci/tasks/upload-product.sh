@@ -1,5 +1,8 @@
 #!/bin/bash
 
+set -x # print commands
+set -e # fail fast
+
 if [[ "${opsmgr_version}" == "1.6" ]]; then
   ./tile/ci/tasks/upload-product-opsmgr16.sh
 elif [[ "${opsmgr_version}" == "1.7" ]]; then
