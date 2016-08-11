@@ -6,7 +6,8 @@ set -x # print commands
 mkdir -p tile/tmp/metadata
 mkdir -p workspace/metadata
 mkdir -p workspace/releases
-mkdir -p workspace/content_migrations
+mkdir -p workspace/content_migrations # opsmgr v1.6
+mkdir -p workspace/migrations         # opsmgr v1.7
 
 TILE_VERSION=$(cat tile-version/number)
 
@@ -62,7 +63,7 @@ sed -i "s/RELEASE_VERSION_MARKER/${TILE_VERSION}/" workspace/metadata/dingo-secr
 cat workspace/metadata/dingo-secrets.yml
 
 echo Looking up all previous versions to generate content_migrations/dingo-secrets.yml
-./tile/ci/tasks/generate_content_migration.rb ${TILE_VERSION} workspace/content_migrations/dingo-secrets.yml
+./tile/ci/tasks/opsmgr16_content_migration.rb ${TILE_VERSION} workspace/content_migrations/dingo-secrets.yml
 
 cat workspace/content_migrations/dingo-secrets.yml
 
@@ -70,7 +71,7 @@ cd workspace
 ls -laR .
 
 echo "creating dingo-secrets-${TILE_VERSION}.pivotal file"
-zip -r dingo-secrets-${TILE_VERSION}.pivotal content_migrations metadata releases
+zip -r dingo-secrets-${TILE_VERSION}.pivotal content_migrations migrations metadata releases
 
 mv dingo-secrets-${TILE_VERSION}.pivotal ../product
 ls ../product
