@@ -25,13 +25,13 @@ uaac token owner get opsman ${opsmgr_username} -s '' -p ${opsmgr_password}
 
 access_token=$(uaac context admin | grep access_token | awk '{print $2}')
 
-info() {
+function info() {
   echo "$@ " >&2
 }
 
 function curl_auth() {
   info curl $@
-  curl -f ${insecure} -H "Authorization: Bearer ${access_token}" $@
+  curl -sf ${insecure} -H "Authorization: Bearer ${access_token}" $@
 }
 
 set +x
@@ -51,17 +51,16 @@ mv ${tile_path} ${zip_tile_path}
   echo Installing product version $product_version
 mv ${zip_tile_path} ${tile_path}
 
-prev_version=$(curl_auth "${opsmgr_url}/api/v0/available_products" | jq -r ".[] | select(.identifier == \"dingo-secrets\") | .product_version")
+prev_version=$(curl_auth "${opsmgr_url}/api/v0/deployed/products" | jq -r ".[] | select(.type == \"dingo-secrets\")")
 
 if [[ "${prev_version}X" == "X" ]]; then
   echo Adding product ${product_version} to the installation
-  product_install_uuid=$(curl_auth "${opsmgr_url}/api/v0/staged/products" | jq -r ".[] | select(.identifier == \"dingo-secrets\") | .guid")
   curl_auth "${opsmgr_url}/api/v0/staged/products" -X POST \
       -d "name=dingo-secrets&product_version=${product_version}"
 else
-  echo Upgrading product from ${prev_version} to ${product_version}
+  echo Upgrading product to ${product_version}
 
-  product_install_uuid=$(curl_auth "${opsmgr_url}/api/v0/staged/products" | jq -r ".products[] | select(.identifier == \"dingo-secrets\") | .guid")
+  product_install_uuid=$(curl_auth "${opsmgr_url}/api/v0/staged/products" | jq -r ".[] | select(.type == \"dingo-secrets\") | .guid")
   curl_auth "${opsmgr_url}/api/v0/staged/products/${product_install_uuid}" -X PUT \
       -d "to_version=${product_version}"
 fi
