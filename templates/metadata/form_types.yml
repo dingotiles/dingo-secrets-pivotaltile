@@ -1,7 +1,33 @@
 form_types:
-- name: broker
-  label: Service Broker
-  description: Configure broker after initial tile deployment
+- name: post-initialize
+  label: After Vault Initialization
+  description: Provide vault token after first tile deployment
+  markdown: |
+    ## First-time configuration
+
+    *NOTE:* Ignore this section on your first tile deployment. Leave vault token as 'TODO'.
+
+    ## Second-time configuration
+
+    After you have deployed Dingo Secrets once, you can then initialize your Vault.
+
+    Get the `<vault-ip>` from the "Status" tab above.
+
+    ```
+    export VAULT_ADDR=http://<vault-ip>:8200
+    vault init
+    vault unseal
+    vault unseal
+    vault unseal
+    ```
+
+    The output will include:
+
+    ```
+    Initial Root Token: 60488d11-5b5b-69ae-42a3-2cc90773fe10
+    ```
+
+    Provide Dingo Secrets tile with the Root Token, "Save", and then "Apply Changes" on the OpsManager dashboard.
   property_inputs:
     - reference: .properties.vault_token
       label: Vault token from vault initialization
