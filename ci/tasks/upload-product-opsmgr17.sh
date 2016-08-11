@@ -1,8 +1,10 @@
 #!/bin/bash
 
-opsmgr_url=${opsmgr_url:-https://10.213.1.1}
-opsmgr_username=${opsmgr_username:-admin}
-opsmgr_password=${opsmgr_password:-Cloudc0w}
+set -x # print commands
+set -e # fail fast
+
+tile_path=$(ls generated-tile/dingo-secrets*.pivotal)
+ls -al ${tile_path}
 
 if [[ "${opsmgr_url}X" == "X" ]]; then
   echo "upload-product.sh requires \$opsmgr_url, \$opsmgr_username, \$opsmgr_password"
@@ -15,6 +17,8 @@ if [[ "${opsmgr_skip_ssl_verification}X" != "X" ]]; then
   insecure="-k"
   skip_ssl="--skip-ssl-validation"
 fi
+
+gem install cf-uaac
 
 uaac target ${opsmgr_url}/uaa ${skip_ssl}
 uaac token owner get opsman ${opsmgr_username} -s '' -p ${opsmgr_password}
