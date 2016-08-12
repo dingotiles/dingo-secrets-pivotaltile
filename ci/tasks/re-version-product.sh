@@ -19,7 +19,7 @@ sed -i -e "s/^product_version:.*$/product_version: \"${next_tile_version}\"/" un
 cat unpack/metadata/dingo-secrets.yml
 
 echo Looking up all previous versions to generate content_migrations/dingo-secrets.yml
-./tile/ci/tasks/opsmgr16_content_migration.rb ${next_tile_version} workspace/content_migrations/dingo-secrets.yml
+./tile/ci/tasks/opsmgr16_content_migration.rb ${next_tile_version} unpack/content_migrations/dingo-secrets.yml
 cat unpack/content_migrations/dingo-secrets.yml
 
 cd unpack
