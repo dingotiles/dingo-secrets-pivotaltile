@@ -3,11 +3,7 @@ form_types:
   label: Vault backend
   description: Choose Vault backend for simplicty vs high-availability
   markdown: |
-    ## Choosing a Vault backend
-
     Hashicorp Vault supports various backends for storage of user data.
-
-    Choose based on simplicity (local filesystem) or high-availability (Amazon S3).
   property_inputs:
     - reference: .properties.backend_selector
       label: Backend choices
