@@ -49,6 +49,7 @@ jobs:
       trigger: true
       params: {tarball: true}
     - get: broker-registrar
+      trigger: true
       params: {tarball: true}
     - get: pivnet-stemcell
       trigger: true
@@ -196,6 +197,7 @@ resources:
 - name: vault-boshrelease
   type: bosh-io-release
   source: {repository: cloudfoundry-community/vault-boshrelease}
+
 - name: broker-registrar
   type: bosh-io-release
   source: {repository: cloudfoundry-community/broker-registrar-boshrelease}
